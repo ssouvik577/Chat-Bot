@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot Helpdesk</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        select, input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chatbot Helpdesk</h1>
+    <form action="/chat" method="POST">
+        <label for="condition">Select Health Condition:</label>
+        <select name="condition" id="condition">
+            <option value="Condition 1">Condition 1</option>
+            <option value="Condition 2">Condition 2</option>
+            <option value="Condition 3">Condition 3</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <label for="severity">Select Severity:</label>
+        <select name="severity" id="severity">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+        </select>
+
+        <label for="message">Your Name:</label>
+        <input type="text" name="message" id="message">
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <div id="response"></div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const form = event.target;
+            const condition = form.condition.value;
+            const severity = form.severity.value;
+            const message = form.message.value;
+            const responseContainer = document.getElementById('response');
+
+            // Send an AJAX request to the '/chat' endpoint
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/chat');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    responseContainer.innerText = xhr.responseText;
+                } else {
+                    responseContainer.innerText = 'Error occurred.';
+                }
+            };
+            const formData = new FormData(form);
+            xhr.send(new URLSearchParams(formData));
+        });
+    </script>
+</body>
+</html>
